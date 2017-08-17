@@ -41,6 +41,15 @@ class ConferenceController extends Controller
         $conference = Conference::where('remember_token', $token)->get();
         $conference = $conference[0]['id'];
 
+        $attend = ConferenceAttend::where([
+            ['user_id', \Auth::user()->id],
+            ['conference_id', $conference ]
+        ])->count();
+
+        if( $attend != 0 ) {
+            return redirect('/conference/'. $token);
+        }
+
         $attend = new ConferenceAttend();
 
         $data['user_id'] = \Auth::user()->id;
