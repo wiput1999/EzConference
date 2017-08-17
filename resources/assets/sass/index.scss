@@ -1,0 +1,47 @@
+.index-header {
+  margin-top: -20px;
+  background: url("../images/header.jpg");
+  height: calc(100vh - 56px);
+  background-size: cover;
+}
+
+.overlay {
+  width: calc(100vw);
+  margin-left: -15px;
+  margin-right: -15px;
+  height: calc(100vh - 56px);
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.index-title {
+  padding-top: 8%;
+  font-size: 5em;
+  color: #FFFFFF;
+  text-transform: uppercase;
+}
+
+.index-subtitle {
+  width: 100%;
+  text-align: center;
+  bottom: 15%;
+  position: absolute;
+}
+
+.index-button {
+  display: inline-block;
+  border: 5px solid #000;
+  padding: 10px 20px;
+  color: #000;
+  background-color: #fff;
+  text-transform: uppercase;
+  transition: 0.3s;
+  font-size: 4em;
+  font-weight: 600;
+}
+
+.index-button:hover {
+  background: #000;
+  border: 5px solid #fff;
+  color: #fff;
+  text-decoration: none;
+}
