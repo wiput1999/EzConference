@@ -18,7 +18,7 @@
         </div>
         <div class="row">
             <div class="col-lg-12">
-                <form action="{{ URL('/conference/edit') }}" method="POST">
+                <form action="{{ URL('/conference/edit/'.$token) }}" method="POST">
                     {{ csrf_field() }}
                     <div class="form-group">
                         <label for="InputName">Name</label>

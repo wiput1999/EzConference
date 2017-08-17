@@ -34,7 +34,23 @@ class ConferenceController extends Controller
 
     public function getConferenceEdit($token) {
         $conference = Conference::where('remember_token', $token)->get();
-        return view('conference.edit', ['conference' => $conference[0]]);
+        return view('conference.edit', ['conference' => $conference[0], 'token' => $token]);
+    }
+
+    public function storeConferenceEdit(Request $request, $token) {
+
+        $inputs = $request->all();
+
+        $conference = Conference::where('remember_token', $token)->get()[0];
+
+        $conference->name = $inputs['name'];
+        $conference->description = $inputs['description'];
+        $conference->open = $inputs['open'];
+        $conference->capacity = $inputs['capacity'];
+
+        $conference->save();
+
+        return redirect('/conference/'.$token);
     }
 
     public function joinConference($token) {
@@ -61,5 +77,13 @@ class ConferenceController extends Controller
 
         return redirect('/conference/'.$token);
 
+    }
+
+    public function getConferenceIndex($token) {
+        $conference = Conference::where('remember_token', $token)->get()[0];
+
+        $conference['owner_name'] = User::find($conference['owner'])['name'];
+
+        return view('conference.index', ['conference' => $conference]);
     }
 }

@@ -36,5 +36,7 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('/conference/edit/{id}', 'ConferenceController@getConferenceEdit');
 
-    Route::get('/conference/{id}');
+    Route::post('/conference/edit/{id}', 'ConferenceController@storeConferenceEdit');
+
+    Route::get('/conference/{id}', 'ConferenceController@getConferenceIndex');
 });
