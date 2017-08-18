@@ -11,6 +11,8 @@
             {{--If logged in--}}
             @else
                 <li class="nav-item {{ \Request::is('dashboard') ? 'active' : '' }}"><a class="nav-link" href="{{ URL('/dashboard') }}">Dashboard</a></li>
+                <li class="nav-item {{ \Request::is('dashboard/conference') ? 'active' : '' }}"><a class="nav-link" href="{{ URL('/dashboard/conference') }}">My Conference</a></li>
+
             @endif
         </ul>
         <div class="navbar-nav mr-0 my-2 my-lg-0">

@@ -16,17 +16,17 @@
                         <th>Title</th>
                         <th>Capacity</th>
                         <th>Owner</th>
-                        <th>Action</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($conferences as $conference)
                         <tr>
-                            <td scope="row">{{ $conference['id'] }}</td>
+                            <th scope="row">{{ $conference['id'] }}</th>
                             <td>{{ $conference['name'] }}</td>
                             <td>{{ $conference['capacity'] }}</td>
                             <td>{{ $conference['owner_name'] }}</td>
-                            <td>
+                            <td class="text-right">
                                 <a class="btn btn-success" href="{{ URL('/conference/view/'. $conference['remember_token']) }}"><span class="oi oi-eye"></span> View</a>
                                 @if($conference['owner'] == Auth::user()->id)
                                     <a class="btn btn-primary" href="{{ URL('/conference/edit/'. $conference['remember_token']) }}"><span class="oi oi-pencil"></span> Edit</a>
