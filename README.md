@@ -1,4 +1,4 @@
-#EzConference Project
+# EzConference Project
 This project has made to help conference host to serve document to attendee easier
 
 ## Main Features

@@ -33,23 +33,26 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/conference/view/{id}', 'ConferenceController@getConferenceDetails');
 //    Join conference
     Route::post('/conference/join/{id}', 'ConferenceController@joinConference');
-
+//    Edit conference
     Route::get('/conference/edit/{id}', 'ConferenceController@getConferenceEdit');
-
+//    Save conference edit
     Route::post('/conference/edit/{id}', 'ConferenceController@storeConferenceEdit');
-
+//    Conference index page
     Route::get('/conference/{id}', 'ConferenceController@getConferenceIndex');
-
+//    Create new question in conference
     Route::get('/conference/{id}/questions/new', 'ConferenceController@getConferenceNewQuestions');
-
+//    Save new question
     Route::post('/conference/{id}/questions/new', 'ConferenceController@storeConferenceNewQuestions');
-
+//    See question details
     Route::get('/conference/{token}/questions/{id}', 'ConferenceController@getConferenceQuestionsDetail');
-
+//    Edit question
     Route::get('/conference/{token}/questions/{id}/edit', 'ConferenceController@getConferenceQuestionsEdit');
-
+//    Save edited question
     Route::post('/conference/{token}/questions/{id}/edit', 'ConferenceController@storeConferenceQuestionsEdit');
-
-
+//    New answer for question
+    Route::get('/conference/{token}/questions/{id}/answer/new', 'ConferenceController@getNewAnswerForm');
+//    Save new answer
+    Route::post('/conference/{token}/questions/{id}/answer/new', 'ConferenceController@storeNewAnswerForm');
+//    See my conference list and manage
     Route::get('/dashboard/conference/', 'ConferenceController@getOwnConferenceList');
 });
