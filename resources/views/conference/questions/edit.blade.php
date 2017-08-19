@@ -17,17 +17,17 @@
             @endif
         </div>
         <div class="col-lg-12">
-            <form action="{{ URL('/conference/'.$conference.'/questions/new') }}" method="POST">
+            <form action="{{ URL('/conference/'.$conference.'/questions/'.$question['id'].'/edit') }}" method="POST">
                 {{ csrf_field() }}
                 <div class="form-group">
                     <label for="Question">Question</label>
-                    <input type="text" class="form-control" id="Question" name="question" placeholder="Question" value="{{ old('question') }}">
+                    <input type="text" class="form-control" id="Question" name="question" placeholder="Question" value="{{ $question['question'] }}">
                 </div>
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea class="form-control" id="description" name="description" rows="3">{{ old('description') }}</textarea>
+                    <textarea class="form-control" id="description" name="description" rows="3">{{ $question['description'] }}</textarea>
                 </div>
-                <button type="submit" class="btn btn-primary"><span class="oi oi-plus"></span> Create</button>
+                <button type="submit" class="btn btn-primary"><span class="oi oi-hard-drive"></span> Save</button>
             </form>
         </div>
     </div>

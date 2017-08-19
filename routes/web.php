@@ -46,6 +46,10 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('/conference/{token}/questions/{id}', 'ConferenceController@getConferenceQuestionsDetail');
 
+    Route::get('/conference/{token}/questions/{id}/edit', 'ConferenceController@getConferenceQuestionsEdit');
+
+    Route::post('/conference/{token}/questions/{id}/edit', 'ConferenceController@storeConferenceQuestionsEdit');
+
 
     Route::get('/dashboard/conference/', 'ConferenceController@getOwnConferenceList');
 });
