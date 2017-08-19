@@ -16,14 +16,14 @@
         <div class="row">
             <a class="btn btn-success" href="{{ URL('/conference/'. $conference .'/questions/'. $question['id'] .'/answer/new') }}"><span class="oi oi-plus"></span> New Answer</a>
         </div>
-        <div class="row">
+        <div class="row answer-card">
             @foreach($answers as $answer)
                 <div class="card col-lg-3 col-sm-12">
                     <div class="card-body">
                         <h4 class="card-title">{{ $answer['owner_name'] }}</h4>
                         <p class="card-text">{{ $answer['answer'] }}</p>
                         @if($answer['owner'] == Auth::user()->id)
-                            <a href="#" class="card-link">Card link</a>
+                            <a href="#" class="card-link"><span class="oi oi-pencil"></span> Edit</a>
                         @endif
                     </div>
                 </div>
