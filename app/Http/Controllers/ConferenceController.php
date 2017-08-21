@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\Routing\Matcher\RedirectableUrlMatcher;
+use Illuminate\Support\Facades\Input;
 
 class ConferenceController extends Controller
 {
@@ -442,11 +443,13 @@ class ConferenceController extends Controller
 
         $attachment = new Attachments();
 
-        $filename = $token . '_' . md5(time() . str_random(100));
+        $attachment->fill($inputs);
 
-        $file = $request->file('attachments');
+        $filename = $token . md5(time() . str_random(100));
 
-        Storage::disk('public')->put($filename . '.pdf', File::get($file));
+        $file = $request->file('attachment');
+
+        Storage::disk('public')->put($filename . '.pdf', File::get(Input::file('attachment')));
 
         $attachment['location'] = $filename;
 
