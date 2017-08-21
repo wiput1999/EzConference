@@ -24,6 +24,7 @@
                         <p class="card-text">{{ $answer['answer'] }}</p>
                         @if($answer['owner'] == Auth::user()->id)
                             <a href="{{ URL('/conference/'. $conference .'/questions/'. $question['id'] .'/answer/'.$answer['id'].'/edit') }}" class="card-link"><span class="oi oi-pencil"></span> Edit</a>
+                            <a href="{{ URL('/conference/'. $conference .'/questions/'. $question['id'] .'/answer/'.$answer['id'].'/destroy') }}" class="card-link" style="color: #FF0000"><span class="oi oi-delete"></span> Delete</a>
                         @endif
                     </div>
                 </div>

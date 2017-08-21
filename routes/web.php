@@ -60,6 +60,8 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::delete('/conference/{token}/destroy', 'ConferenceController@destroyConference');
 
+    Route::get('/conference/{token}/questions/{id}/answer/{ans_id}/destroy', 'ConferenceController@destroyAnswer');
+
 //    See my conference list and manage
     Route::get('/dashboard/conference/', 'ConferenceController@getOwnConferenceList');
 });

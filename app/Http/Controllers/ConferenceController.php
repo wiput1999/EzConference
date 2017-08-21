@@ -13,17 +13,18 @@ use Symfony\Component\Routing\Matcher\RedirectableUrlMatcher;
 
 class ConferenceController extends Controller
 {
-    public function getConferenceDetails($token) {
+    public function getConferenceDetails($token)
+    {
         $conference = Conference::where('remember_token', $token)->get();
         $conference = $conference[0]['id'];
 
         $attend = ConferenceAttend::where([
             ['user_id', \Auth::user()->id],
-            ['conference_id', $conference ]
+            ['conference_id', $conference]
         ])->count();
 
-        if( $attend != 0 ) {
-            return redirect('/conference/'. $token);
+        if ($attend != 0) {
+            return redirect('/conference/' . $token);
         }
 
         $conference = Conference::where('remember_token', $token)->get();
@@ -32,11 +33,13 @@ class ConferenceController extends Controller
         return view('conference.detail', ['conference' => $conference]);
     }
 
-    public function getNewConferenceForm() {
+    public function getNewConferenceForm()
+    {
         return view('conference.new');
     }
 
-    public function storeNewConferenceForm(Request $request) {
+    public function storeNewConferenceForm(Request $request)
+    {
         $inputs = $request->all();
 
         $conference = new Conference();
@@ -58,15 +61,17 @@ class ConferenceController extends Controller
 
         $token = $inputs['remember_token'];
 
-        return redirect('/conference/'. $token);
+        return redirect('/conference/' . $token);
     }
 
-    public function getConferenceEdit($token) {
+    public function getConferenceEdit($token)
+    {
         $conference = Conference::where('remember_token', $token)->get();
         return view('conference.edit', ['conference' => $conference[0], 'token' => $token]);
     }
 
-    public function storeConferenceEdit(Request $request, $token) {
+    public function storeConferenceEdit(Request $request, $token)
+    {
 
         $inputs = $request->all();
 
@@ -79,10 +84,11 @@ class ConferenceController extends Controller
 
         $conference->save();
 
-        return redirect('/conference/'.$token);
+        return redirect('/conference/' . $token);
     }
 
-    public function joinConference($token) {
+    public function joinConference($token)
+    {
         $conference = Conference::where('remember_token', $token)->get();
         $conference = $conference[0]['id'];
 
@@ -95,20 +101,21 @@ class ConferenceController extends Controller
 
         $attend->save();
 
-        return redirect('/conference/'.$token);
+        return redirect('/conference/' . $token);
 
     }
 
-    public function getConferenceIndex($token) {
+    public function getConferenceIndex($token)
+    {
         $conference = Conference::where('remember_token', $token)->get()[0];
 
         $attend = ConferenceAttend::where([
             ['user_id', \Auth::user()->id],
-            ['conference_id', $conference['id'] ]
+            ['conference_id', $conference['id']]
         ])->count();
 
-        if( $attend == 0 ) {
-            return redirect('/conference/view/'. $token);
+        if ($attend == 0) {
+            return redirect('/conference/view/' . $token);
         }
 
         $conference['owner_name'] = User::find($conference['owner'])['name'];
@@ -132,7 +139,8 @@ class ConferenceController extends Controller
         ]);
     }
 
-    public function getOwnConferenceList() {
+    public function getOwnConferenceList()
+    {
         $conferences = Conference::where('owner', \Auth::user()->id)->get();
 
         foreach ($conferences as $conference) {
@@ -142,11 +150,13 @@ class ConferenceController extends Controller
         return view('conference.ownlist', ['conferences' => $conferences]);
     }
 
-    public function getConferenceNewQuestions($token) {
+    public function getConferenceNewQuestions($token)
+    {
         return view('conference.questions.new', ['conference' => $token]);
     }
 
-    public function storeConferenceNewQuestions(Request $request, $token) {
+    public function storeConferenceNewQuestions(Request $request, $token)
+    {
         $inputs = $request->all();
 
         $question = new Questions();
@@ -159,19 +169,20 @@ class ConferenceController extends Controller
 
         $question->save();
 
-        return redirect('/conference/'.$token);
+        return redirect('/conference/' . $token);
     }
 
-    public function getConferenceQuestionsDetail($token, $id) {
+    public function getConferenceQuestionsDetail($token, $id)
+    {
         $conference_id = Conference::where('remember_token', $token)->get()[0]['id'];
 
         $attend = ConferenceAttend::where([
             ['user_id', \Auth::user()->id],
-            ['conference_id', $conference_id ]
+            ['conference_id', $conference_id]
         ])->count();
 
-        if( $attend == 0 ) {
-            return redirect('/conference/view/'. $token);
+        if ($attend == 0) {
+            return redirect('/conference/view/' . $token);
         }
 
         $question = Questions::where([
@@ -194,16 +205,17 @@ class ConferenceController extends Controller
         ]);
     }
 
-    public function getConferenceQuestionsEdit($token, $id) {
+    public function getConferenceQuestionsEdit($token, $id)
+    {
         $conference_id = Conference::where('remember_token', $token)->get()[0]['id'];
 
         $attend = ConferenceAttend::where([
             ['user_id', \Auth::user()->id],
-            ['conference_id', $conference_id ]
+            ['conference_id', $conference_id]
         ])->count();
 
-        if( $attend == 0 ) {
-            return redirect('/conference/view/'. $token);
+        if ($attend == 0) {
+            return redirect('/conference/view/' . $token);
         }
 
         $question = Questions::where([
@@ -218,16 +230,17 @@ class ConferenceController extends Controller
 
     }
 
-    public function storeConferenceQuestionsEdit(Request $request, $token, $id) {
+    public function storeConferenceQuestionsEdit(Request $request, $token, $id)
+    {
         $conference_id = Conference::where('remember_token', $token)->get()[0]['id'];
 
         $attend = ConferenceAttend::where([
             ['user_id', \Auth::user()->id],
-            ['conference_id', $conference_id ]
+            ['conference_id', $conference_id]
         ])->count();
 
-        if( $attend == 0 ) {
-            return redirect('/conference/view/'. $token);
+        if ($attend == 0) {
+            return redirect('/conference/view/' . $token);
         }
 
         $inputs = $request->all();
@@ -239,37 +252,39 @@ class ConferenceController extends Controller
 
         $question->save();
 
-        return redirect('/conference/'. $token .'/questions/'. $id);
+        return redirect('/conference/' . $token . '/questions/' . $id);
     }
 
-    public function getNewAnswerForm($token, $id) {
+    public function getNewAnswerForm($token, $id)
+    {
         $conference_id = Conference::where('remember_token', $token)->get()[0]['id'];
 
         $attend = ConferenceAttend::where([
             ['user_id', \Auth::user()->id],
-            ['conference_id', $conference_id ]
+            ['conference_id', $conference_id]
         ])->count();
 
-        if( $attend == 0 ) {
-            return redirect('/conference/view/'. $token);
+        if ($attend == 0) {
+            return redirect('/conference/view/' . $token);
         }
 
         return view('conference.answer.new', [
-           'conference' => $token,
-           'question' => $id
+            'conference' => $token,
+            'question' => $id
         ]);
     }
 
-    public function storeNewAnswerForm(Request $request, $token, $id) {
+    public function storeNewAnswerForm(Request $request, $token, $id)
+    {
         $conference_id = Conference::where('remember_token', $token)->get()[0]['id'];
 
         $attend = ConferenceAttend::where([
             ['user_id', \Auth::user()->id],
-            ['conference_id', $conference_id ]
+            ['conference_id', $conference_id]
         ])->count();
 
-        if( $attend == 0 ) {
-            return redirect('/conference/view/'. $token);
+        if ($attend == 0) {
+            return redirect('/conference/view/' . $token);
         }
 
         $inputs = $request->all();
@@ -283,25 +298,26 @@ class ConferenceController extends Controller
 
         $answer->save();
 
-        return redirect('/conference/'. $token .'/questions/'. $id);
+        return redirect('/conference/' . $token . '/questions/' . $id);
     }
 
-    public function getEditAnswerForm($token, $id, $ans_id) {
+    public function getEditAnswerForm($token, $id, $ans_id)
+    {
         $conference_id = Conference::where('remember_token', $token)->get()[0]['id'];
 
         $attend = ConferenceAttend::where([
             ['user_id', \Auth::user()->id],
-            ['conference_id', $conference_id ]
+            ['conference_id', $conference_id]
         ])->count();
 
-        if( $attend == 0 ) {
-            return redirect('/conference/view/'. $token);
+        if ($attend == 0) {
+            return redirect('/conference/view/' . $token);
         }
 
         $answer = Answers::find($ans_id);
 
         if ($id != $answer['question_id']) {
-            return redirect('/conference/view/'. $token);
+            return redirect('/conference/view/' . $token);
         }
 
         return view('conference.answer.edit', [
@@ -311,22 +327,23 @@ class ConferenceController extends Controller
         ]);
     }
 
-    public function storeEditAnswerForm(Request $request, $token, $id, $ans_id) {
+    public function storeEditAnswerForm(Request $request, $token, $id, $ans_id)
+    {
         $conference_id = Conference::where('remember_token', $token)->get()[0]['id'];
 
         $attend = ConferenceAttend::where([
             ['user_id', \Auth::user()->id],
-            ['conference_id', $conference_id ]
+            ['conference_id', $conference_id]
         ])->count();
 
-        if( $attend == 0 ) {
-            return redirect('/conference/view/'. $token);
+        if ($attend == 0) {
+            return redirect('/conference/view/' . $token);
         }
 
         $answer = Answers::find($ans_id);
 
         if ($id != $answer['question_id']) {
-            return redirect('/conference/view/'. $token);
+            return redirect('/conference/view/' . $token);
         }
 
         $inputs = $request->all();
@@ -335,14 +352,15 @@ class ConferenceController extends Controller
 
         $answer->save();
 
-        return redirect('/conference/'. $token . '/questions/'. $id);
+        return redirect('/conference/' . $token . '/questions/' . $id);
     }
 
-    public function destroyConference($token) {
+    public function destroyConference($token)
+    {
         $conference_owner = Conference::where('remember_token', $token)->get()[0]['owner'];
         $conference_id = Conference::where('remember_token', $token)->get()[0]['id'];
 
-        if ( $conference_owner != \Auth::user()->id ) {
+        if ($conference_owner != \Auth::user()->id) {
             return redirect('/dashboard/conference');
         }
 
@@ -362,5 +380,29 @@ class ConferenceController extends Controller
 
         return redirect('/dashboard/conference');
 
+    }
+
+    public function destroyAnswer($token, $id, $ans_id)
+    {
+        $conference_id = Conference::where('remember_token', $token)->get()[0]['id'];
+
+        $attend = ConferenceAttend::where([
+            ['user_id', \Auth::user()->id],
+            ['conference_id', $conference_id]
+        ])->count();
+
+        if ($attend == 0) {
+            return redirect('/conference/view/' . $token);
+        }
+
+        $answer = Answers::find($ans_id);
+
+        if ($answer['owner'] != \Auth::user()->id) {
+            return redirect('/conference/' . $token);
+        }
+
+        Answers::find($ans_id)->delete();
+
+        return redirect('/conference/'. $token . '/questions/' . $id);
     }
 }
