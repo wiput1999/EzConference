@@ -53,6 +53,13 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('/conference/{token}/questions/{id}/answer/new', 'ConferenceController@getNewAnswerForm');
 //    Save new answer
     Route::post('/conference/{token}/questions/{id}/answer/new', 'ConferenceController@storeNewAnswerForm');
+
+    Route::get('/conference/{token}/questions/{id}/answer/{ans_id}/edit', 'ConferenceController@getEditAnswerForm');
+
+    Route::post('/conference/{token}/questions/{id}/answer/{ans_id}/edit', 'ConferenceController@storeEditAnswerForm');
+
+    Route::delete('/conference/{token}/destroy', 'ConferenceController@destroyConference');
+
 //    See my conference list and manage
     Route::get('/dashboard/conference/', 'ConferenceController@getOwnConferenceList');
 });

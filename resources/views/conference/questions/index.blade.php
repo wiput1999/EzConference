@@ -23,7 +23,7 @@
                         <h4 class="card-title">{{ $answer['owner_name'] }}</h4>
                         <p class="card-text">{{ $answer['answer'] }}</p>
                         @if($answer['owner'] == Auth::user()->id)
-                            <a href="#" class="card-link"><span class="oi oi-pencil"></span> Edit</a>
+                            <a href="{{ URL('/conference/'. $conference .'/questions/'. $question['id'] .'/answer/'.$answer['id'].'/edit') }}" class="card-link"><span class="oi oi-pencil"></span> Edit</a>
                         @endif
                     </div>
                 </div>

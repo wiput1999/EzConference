@@ -16,3 +16,7 @@ mix.js('resources/assets/js/app.js', 'public/js')
 mix.copy('vendor/components/jquery/jquery.min.js', 'public/js');
 mix.copy('node_modules/bootstrap/dist/js/bootstrap.min.js', 'public/js');
 mix.copy('node_modules/popper.js/dist/umd/popper.min.js', 'public/js');
+
+if (mix.inProduction()) {
+    mix.version();
+}

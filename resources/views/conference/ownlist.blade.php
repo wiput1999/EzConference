@@ -29,8 +29,13 @@
                         <td>{{ $conference['owner_name'] }}</td>
                         <td>{{ $conference['open'] == 1 ? "Yes" : "No" }}</td>
                         <td class="text-right">
-                            <a class="btn btn-success" href="{{ URL('/conference/view/'. $conference['remember_token']) }}"><span class="oi oi-eye"></span> View</a>
-                            <a class="btn btn-primary" href="{{ URL('/conference/edit/'. $conference['remember_token']) }}"><span class="oi oi-pencil"></span> Edit</a>
+                            <form action="{{ URL('/conference/'. $conference['remember_token'] . '/destroy') }}" method="post">
+                                {!! csrf_field() !!}
+                                {!! method_field('DELETE') !!}
+                                <a class="btn btn-success" href="{{ URL('/conference/view/'. $conference['remember_token']) }}"><span class="oi oi-eye"></span> View</a>
+                                <a class="btn btn-primary" href="{{ URL('/conference/edit/'. $conference['remember_token']) }}"><span class="oi oi-pencil"></span> Edit</a>
+                                <button class="btn btn-danger"><span class="oi oi-delete"></span> Delete</button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach

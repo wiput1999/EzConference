@@ -9,6 +9,7 @@ use App\ConferenceAttend;
 use App\Answers;
 use App\Attachments;
 use Illuminate\Http\Request;
+use Symfony\Component\Routing\Matcher\RedirectableUrlMatcher;
 
 class ConferenceController extends Controller
 {
@@ -285,4 +286,81 @@ class ConferenceController extends Controller
         return redirect('/conference/'. $token .'/questions/'. $id);
     }
 
+    public function getEditAnswerForm($token, $id, $ans_id) {
+        $conference_id = Conference::where('remember_token', $token)->get()[0]['id'];
+
+        $attend = ConferenceAttend::where([
+            ['user_id', \Auth::user()->id],
+            ['conference_id', $conference_id ]
+        ])->count();
+
+        if( $attend == 0 ) {
+            return redirect('/conference/view/'. $token);
+        }
+
+        $answer = Answers::find($ans_id);
+
+        if ($id != $answer['question_id']) {
+            return redirect('/conference/view/'. $token);
+        }
+
+        return view('conference.answer.edit', [
+            'conference' => $token,
+            'question' => $id,
+            'answer' => $answer
+        ]);
+    }
+
+    public function storeEditAnswerForm(Request $request, $token, $id, $ans_id) {
+        $conference_id = Conference::where('remember_token', $token)->get()[0]['id'];
+
+        $attend = ConferenceAttend::where([
+            ['user_id', \Auth::user()->id],
+            ['conference_id', $conference_id ]
+        ])->count();
+
+        if( $attend == 0 ) {
+            return redirect('/conference/view/'. $token);
+        }
+
+        $answer = Answers::find($ans_id);
+
+        if ($id != $answer['question_id']) {
+            return redirect('/conference/view/'. $token);
+        }
+
+        $inputs = $request->all();
+
+        $answer['answer'] = $inputs['answer'];
+
+        $answer->save();
+
+        return redirect('/conference/'. $token . '/questions/'. $id);
+    }
+
+    public function destroyConference($token) {
+        $conference_owner = Conference::where('remember_token', $token)->get()[0]['owner'];
+        $conference_id = Conference::where('remember_token', $token)->get()[0]['id'];
+
+        if ( $conference_owner != \Auth::user()->id ) {
+            return redirect('/dashboard/conference');
+        }
+
+        Conference::find($conference_id)->delete();
+
+        $questions = Questions::where('conference_id', '=', $conference_id)->get();
+
+        foreach ($questions as $question) {
+            Answers::where('question_id', '=', $question['id'])->delete();
+        }
+
+        Questions::where('conference_id', '=', $conference_id)->delete();
+
+        Attachments::where('conference_id', '=', $conference_id)->delete();
+
+        ConferenceAttend::where('conference_id', '=', $conference_id)->delete();
+
+        return redirect('/dashboard/conference');
+
+    }
 }
