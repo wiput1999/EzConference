@@ -8,12 +8,19 @@ This project has made to help conference host to serve document to attendee easi
 - [ ] Attachment Storage
 - [x] Automated Deployment Script for Azure App Service
 - [x] Answer to question
+- [x] Edit Answers
+- [x] Edit Questions
+- [x] Delete Answers
+- [x] Delete Questions
 - [x] Manage Own Conferences
-- [ ] Remove Own Conferences
+- [x] Remove Own Conferences
 - [x] Enable/Disable Own Conferences
 - [x] Edit Own Conferences
 - [ ] Real-time data update
 - [ ] Conference join options (Invite only, Password Protect, Enter by code)
+
+## Environment Setup
+Comming soon
 
 ## Technology (Frontend)
 * Bootstrap 4
