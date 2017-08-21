@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <h1>New Attachments</h1>
+            <h1>New Question</h1>
         </div>
         <div class="row">
             @include('layouts.error')
