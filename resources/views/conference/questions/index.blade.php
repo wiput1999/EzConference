@@ -18,7 +18,7 @@
         </div>
         <div class="row answer-card">
             @foreach($answers as $answer)
-                <div class="card col-lg-3 col-sm-12">
+                <div class="card col-lg-3 col-sm-12 answer-sub-card">
                     <div class="card-body">
                         <h4 class="card-title">{{ $answer['owner_name'] }}</h4>
                         <p class="card-text">{{ $answer['answer'] }}</p>

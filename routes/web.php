@@ -62,6 +62,12 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('/conference/{token}/questions/{id}/answer/{ans_id}/destroy', 'ConferenceController@destroyAnswer');
 
+    Route::get('/conference/{token}/attachments/new', 'ConferenceController@getUploadForm');
+
+    Route::post('/conference/{token}/attachments/new', 'ConferenceController@storeUploadForm');
+
+    Route::get('/conference/{token}/attachments/{id}', 'ConferenceController@getAttachment');
+
 //    See my conference list and manage
     Route::get('/dashboard/conference/', 'ConferenceController@getOwnConferenceList');
 });

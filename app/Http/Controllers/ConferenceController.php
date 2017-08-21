@@ -9,6 +9,9 @@ use App\ConferenceAttend;
 use App\Answers;
 use App\Attachments;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\Routing\Matcher\RedirectableUrlMatcher;
 
 class ConferenceController extends Controller
@@ -268,7 +271,7 @@ class ConferenceController extends Controller
             return redirect('/conference/view/' . $token);
         }
 
-        return view('conference.answer.new', [
+        return view('conference.answers.new', [
             'conference' => $token,
             'question' => $id
         ]);
@@ -320,7 +323,7 @@ class ConferenceController extends Controller
             return redirect('/conference/view/' . $token);
         }
 
-        return view('conference.answer.edit', [
+        return view('conference.answers.edit', [
             'conference' => $token,
             'question' => $id,
             'answer' => $answer
@@ -404,5 +407,75 @@ class ConferenceController extends Controller
         Answers::find($ans_id)->delete();
 
         return redirect('/conference/'. $token . '/questions/' . $id);
+    }
+
+    public function getUploadForm($token) {
+        $conference_id = Conference::where('remember_token', $token)->get()[0]['id'];
+
+        $attend = ConferenceAttend::where([
+            ['user_id', \Auth::user()->id],
+            ['conference_id', $conference_id]
+        ])->count();
+
+        if ($attend == 0) {
+            return redirect('/conference/view/' . $token);
+        }
+
+
+
+        return view('conference.attachments.new', ['conference' => $token]);
+    }
+
+    public function storeUploadForm(Request $request, $token) {
+        $conference_id = Conference::where('remember_token', $token)->get()[0]['id'];
+
+        $attend = ConferenceAttend::where([
+            ['user_id', \Auth::user()->id],
+            ['conference_id', $conference_id]
+        ])->count();
+
+        if ($attend == 0) {
+            return redirect('/conference/view/' . $token);
+        }
+
+        $inputs = $request->all();
+
+        $attachment = new Attachments();
+
+        $filename = $token . '_' . md5(time() . str_random(100));
+
+        $file = $request->file('attachments');
+
+        Storage::disk('public')->put($filename . '.pdf', File::get($file));
+
+        $attachment['location'] = $filename;
+
+        $attachment['filename'] = $inputs['filename'];
+
+        $attachment['owner'] = \Auth::user()->id;
+
+        $attachment['conference_id'] = $conference_id;
+
+        $attachment->save();
+
+        return redirect('/conference/'. $token);
+
+    }
+
+    public function getAttachment($token, $id) {
+        $conference_id = Conference::where('remember_token', $token)->get()[0]['id'];
+
+        $attend = ConferenceAttend::where([
+            ['user_id', \Auth::user()->id],
+            ['conference_id', $conference_id]
+        ])->count();
+
+        if ($attend == 0) {
+            return redirect('/conference/view/' . $token);
+        }
+
+        $attachment = Attachments::find($id)['location'] . '.pdf';
+
+        return response(Storage::disk('public')->get($attachment), 200, ['Content-Type' => 'application/pdf']);
     }
 }

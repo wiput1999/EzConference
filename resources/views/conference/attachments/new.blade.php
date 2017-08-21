@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <h1>New Attachments</h1>
+            <h1>New Question</h1>
         </div>
         <div class="row">
             @if (count($errors) > 0)
@@ -17,17 +17,17 @@
             @endif
         </div>
         <div class="col-lg-12">
-            <form action="{{ URL('/conference/'.$conference.'/questions/new') }}" method="POST">
+            <form action="{{ URL('/conference/'.$conference.'/attachments/new') }}" method="POST">
                 {{ csrf_field() }}
                 <div class="form-group">
-                    <label for="Question">Question</label>
-                    <input type="text" class="form-control" id="Question" name="question" placeholder="Question" value="{{ old('question') }}">
+                    <label for="filename">Filename</label>
+                    <input type="text" class="form-control" id="filename" name="filename" placeholder="Filename" value="{{ old('filename') }}">
                 </div>
                 <div class="form-group">
-                    <label for="description">Description</label>
-                    <textarea class="form-control" id="description" name="description" rows="3">{{ old('description') }}</textarea>
+                    <label for="attachments">Attachments (Size limit 10 MB, PDF only)</label>
+                    <input type="file" class="form-control-file" id="attachments" name="attachments">
                 </div>
-                <button type="submit" class="btn btn-primary"><span class="oi oi-plus"></span> Create</button>
+                <button type="submit" class="btn btn-primary"><span class="oi oi-cloud-upload"></span> Upload</button>
             </form>
         </div>
     </div>
