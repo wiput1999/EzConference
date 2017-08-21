@@ -20,7 +20,7 @@ This project has made to help conference host to serve document to attendee easi
 - [ ] Conference join options (Invite only, Password Protect, Enter by code)
 
 ## Environment Setup
-Comming soon
+Coming soon
 
 ## Technology (Frontend)
 * Bootstrap 4
