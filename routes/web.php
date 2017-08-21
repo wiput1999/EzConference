@@ -68,6 +68,8 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('/conference/{token}/attachments/{id}', 'ConferenceController@getAttachment');
 
+    Route::get('/conference/{token}/attachments/delete/{id}', 'ConferenceController@destroyAttachment');
+
 //    See my conference list and manage
     Route::get('/dashboard/conference/', 'ConferenceController@getOwnConferenceList');
 });

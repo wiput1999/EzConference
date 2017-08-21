@@ -6,15 +6,7 @@
             <h1>New Answer</h1>
         </div>
         <div class="row">
-            @if (count($errors) > 0)
-                <div class="alert alert-danger" role="alert">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{$error}}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+            @include('layouts.error')
         </div>
         <div class="col-lg-12">
             <form action="{{ URL('/conference/'. $conference .'/questions/'. $question .'/answer/new') }}" method="POST">

@@ -39,7 +39,7 @@
                         <td class="text-right">
                             <a class="btn btn-success" href="{{ URL('/conference/'. $conference['remember_token'] . '/attachments/'.$attachment['id']) }}"><span class="oi oi-cloud-download"></span> Download</a>
                             @if($attachment['owner'] == Auth::user()->id)
-                                <a class="btn btn-danger" href="{{ URL('/conference/'. $conference['remember_token'] . '/delete/'. $attachment['id']) }}"><span class="oi oi-delete"></span> Delete</a>
+                                <a class="btn btn-danger" href="{{ URL('/conference/'. $conference['remember_token'] . '/attachments/delete/'. $attachment['id']) }}"><span class="oi oi-delete"></span> Delete</a>
                             @endif
                         </td>
                     </tr>

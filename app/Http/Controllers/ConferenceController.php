@@ -46,6 +46,24 @@ class ConferenceController extends Controller
     {
         $inputs = $request->all();
 
+        $rules = [
+            'name' => 'required',
+            'description' => 'required',
+            'capacity' => 'required|integer',
+            'open' => 'required|in:1,0'
+        ];
+        $messages = [
+            'name.required' => 'Please enter conference name',
+            'description.required' => 'Please enter description',
+            'capacity.integer' => 'Invalid capacity number',
+            'capacity.required' => 'Please enter capacity',
+            'open.in' => 'Invalid choice'
+        ];
+        $validator = Validator::make($inputs, $rules, $messages);
+        if($validator->fails()){
+            return redirect('/conference/new')->withInput()->withErrors($validator);
+        }
+
         $conference = new Conference();
 
         $inputs['remember_token'] = str_random(20);
@@ -76,8 +94,25 @@ class ConferenceController extends Controller
 
     public function storeConferenceEdit(Request $request, $token)
     {
-
         $inputs = $request->all();
+
+        $rules = [
+            'name' => 'required',
+            'description' => 'required',
+            'capacity' => 'required|integer',
+            'open' => 'required|in:1,0'
+        ];
+        $messages = [
+            'name.required' => 'Please enter conference name',
+            'description.required' => 'Please enter description',
+            'capacity.integer' => 'Invalid capacity number',
+            'capacity.required' => 'Please enter capacity',
+            'open.in' => 'Invalid choice'
+        ];
+        $validator = Validator::make($inputs, $rules, $messages);
+        if($validator->fails()){
+            return redirect('/conference/edit/'. $token)->withInput()->withErrors($validator);
+        }
 
         $conference = Conference::where('remember_token', $token)->get()[0];
 
@@ -162,6 +197,19 @@ class ConferenceController extends Controller
     public function storeConferenceNewQuestions(Request $request, $token)
     {
         $inputs = $request->all();
+
+        $rules = [
+            'question' => 'required',
+            'description' => 'required',
+        ];
+        $messages = [
+            'question.required' => 'Please enter question',
+            'description.required' => 'Please enter description',
+        ];
+        $validator = Validator::make($inputs, $rules, $messages);
+        if($validator->fails()){
+            return redirect('/conference/'. $token .'/questions/new')->withInput()->withErrors($validator);
+        }
 
         $question = new Questions();
 
@@ -249,6 +297,19 @@ class ConferenceController extends Controller
 
         $inputs = $request->all();
 
+        $rules = [
+            'question' => 'required',
+            'description' => 'required',
+        ];
+        $messages = [
+            'question.required' => 'Please enter question',
+            'description.required' => 'Please enter description',
+        ];
+        $validator = Validator::make($inputs, $rules, $messages);
+        if($validator->fails()){
+            return redirect('/conference/'. $token .'/questions/new')->withInput()->withErrors($validator);
+        }
+
         $question = Questions::find($id);
 
         $question->question = $inputs['question'];
@@ -292,6 +353,17 @@ class ConferenceController extends Controller
         }
 
         $inputs = $request->all();
+
+        $rules = [
+            'answer' => 'required',
+        ];
+        $messages = [
+            'answer.required' => 'Please enter answer',
+        ];
+        $validator = Validator::make($inputs, $rules, $messages);
+        if($validator->fails()){
+            return redirect('/conference/'. $token .'/questions/'. $id . '/answer/new')->withInput()->withErrors($validator);
+        }
 
         $answer = new Answers();
 
@@ -351,6 +423,17 @@ class ConferenceController extends Controller
         }
 
         $inputs = $request->all();
+
+        $rules = [
+            'answer' => 'required',
+        ];
+        $messages = [
+            'answer.required' => 'Please enter answer',
+        ];
+        $validator = Validator::make($inputs, $rules, $messages);
+        if($validator->fails()){
+            return redirect('/conference/'. $token .'/questions/'. $id . '/answer/'. $ans_id .'/edit')->withInput()->withErrors($validator);
+        }
 
         $answer['answer'] = $inputs['answer'];
 
@@ -441,6 +524,20 @@ class ConferenceController extends Controller
 
         $inputs = $request->all();
 
+        $rules = [
+            'filename' => 'required',
+            'attachment' => 'required|max:11240000|mimes:pdf',
+        ];
+        $messages = [
+            'filename.required' => 'Please enter filename',
+            'attachment.mimes' => 'Attachment only PDF',
+            'attachment.max' => 'Attachment size not over 10 MB',
+        ];
+        $validator = Validator::make($inputs, $rules, $messages);
+        if($validator->fails()){
+            return redirect('/conference/'. $token .'/attachment/new')->withInput()->withErrors($validator);
+        }
+
         $attachment = new Attachments();
 
         $attachment->fill($inputs);
@@ -449,7 +546,7 @@ class ConferenceController extends Controller
 
         $file = $request->file('attachment');
 
-        Storage::disk('public')->put($filename . '.pdf', File::get(Input::file('attachment')));
+        Storage::disk('azure')->put($filename . '.pdf', File::get(Input::file('attachment')));
 
         $attachment['location'] = $filename;
 
@@ -479,6 +576,32 @@ class ConferenceController extends Controller
 
         $attachment = Attachments::find($id)['location'] . '.pdf';
 
-        return response(Storage::disk('public')->get($attachment), 200, ['Content-Type' => 'application/pdf']);
+        return response(Storage::disk('azure')->get($attachment), 200, ['Content-Type' => 'application/pdf']);
+    }
+
+    public function destroyAttachment($token, $id) {
+        $conference_id = Conference::where('remember_token', $token)->get()[0]['id'];
+
+        $attend = ConferenceAttend::where([
+            ['user_id', \Auth::user()->id],
+            ['conference_id', $conference_id]
+        ])->count();
+
+        if ($attend == 0) {
+            return redirect('/conference/view/' . $token);
+        }
+
+        $attachment = Attachments::find($id);
+
+        if ($attachment['owner'] != \Auth::user()->id) {
+            return redirect('/conference/' . $token);
+        }
+
+        Storage::disk('azure')->delete($attachment['location'] . '.pdf');
+
+        Attachments::find($id)->delete();
+
+        return redirect('/conference/' . $token);
+
     }
 }

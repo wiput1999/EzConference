@@ -6,15 +6,7 @@
             <h1>Edit Conference</h1>
         </div>
         <div class="row">
-            @if (count($errors) > 0)
-                <div class="alert alert-danger" role="alert">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{$error}}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+            @include('layouts.error')
         </div>
         <div class="row">
             <div class="col-lg-12">
@@ -26,7 +18,7 @@
                     </div>
                     <div class="form-group">
                         <label for="description">Description</label>
-                        <textarea class="form-control" id="description" name="description" rows="3">{{ $conference['description'] }}</textarea>
+                        <textarea class="form-control" id="description" name="description" rows="3" required>{{ $conference['description'] }}</textarea>
                     </div>
                     <div class="form-group">
                         <label for="capacity">Capacity</label>
