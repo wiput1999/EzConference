@@ -544,8 +544,6 @@ class ConferenceController extends Controller
 
         $filename = $token . md5(time() . str_random(100));
 
-        $file = $request->file('attachment');
-
         Storage::disk('azure')->put($filename . '.pdf', File::get(Input::file('attachment')));
 
         $attachment['location'] = $filename;
